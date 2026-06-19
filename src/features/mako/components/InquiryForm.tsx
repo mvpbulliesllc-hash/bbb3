@@ -2,7 +2,7 @@ import { createLead } from '../actions';
 import { LEAD_INTERESTS } from '../types';
 
 const inputClass
-  = 'w-full rounded-lg border border-mako-border bg-mako-ink px-4 py-2.5 text-mako-cream placeholder:text-mako-muted/70 focus:border-mako-gold focus:outline-none';
+  = 'w-full rounded-lg border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-muted-foreground/70 focus:border-foreground focus:outline-none';
 
 type InquiryFormProps = {
   source?: string;
@@ -25,7 +25,7 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
       <div>
         <label
           htmlFor="lead-name"
-          className="mb-1 block text-sm text-mako-muted"
+          className="mb-1 block text-sm text-muted-foreground"
         >
           Name *
         </label>
@@ -34,7 +34,7 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
       <div>
         <label
           htmlFor="lead-email"
-          className="mb-1 block text-sm text-mako-muted"
+          className="mb-1 block text-sm text-muted-foreground"
         >
           Email
         </label>
@@ -50,7 +50,7 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
       <div>
         <label
           htmlFor="lead-phone"
-          className="mb-1 block text-sm text-mako-muted"
+          className="mb-1 block text-sm text-muted-foreground"
         >
           Phone / WhatsApp
         </label>
@@ -59,7 +59,7 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
       <div>
         <label
           htmlFor="lead-country"
-          className="mb-1 block text-sm text-mako-muted"
+          className="mb-1 block text-sm text-muted-foreground"
         >
           Country
         </label>
@@ -71,13 +71,13 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
       <div>
         <label
           htmlFor="lead-interest"
-          className="mb-1 block text-sm text-mako-muted"
+          className="mb-1 block text-sm text-muted-foreground"
         >
           I'm interested in
         </label>
         <select id="lead-interest" name="interest" defaultValue={defaultInterest} className={inputClass}>
           {LEAD_INTERESTS.map(i => (
-            <option key={i} value={i} className="bg-mako-ink capitalize">
+            <option key={i} value={i} className="capitalize">
               {i === 'general' ? 'General inquiry' : `${i.charAt(0).toUpperCase()}${i.slice(1)}`}
             </option>
           ))}
@@ -89,7 +89,7 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
     <div>
       <label
         htmlFor="lead-message"
-        className="mb-1 block text-sm text-mako-muted"
+        className="mb-1 block text-sm text-muted-foreground"
       >
         Message
       </label>
@@ -105,9 +105,9 @@ export const InquiryForm = ({ source, redirectTo, defaultInterest = 'general', c
     <button
       type="submit"
       className="
-        w-full rounded-full bg-mako-gold px-6 py-3 font-semibold text-mako-ink
-        transition-colors
-        hover:bg-mako-gold-soft
+        w-full rounded-full bg-foreground px-6 py-3 font-medium text-background
+        transition-opacity
+        hover:opacity-80
         sm:w-auto
       "
     >

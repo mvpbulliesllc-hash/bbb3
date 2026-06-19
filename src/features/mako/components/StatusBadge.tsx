@@ -1,28 +1,28 @@
 import { cn } from '@/utils/Helpers';
 
 const styles: Record<string, string> = {
-  available: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  reserved: 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
-  sold: 'bg-zinc-500/15 text-zinc-300 ring-zinc-500/30',
-  current: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  planned: 'bg-sky-500/15 text-sky-300 ring-sky-500/30',
-  past: 'bg-zinc-500/15 text-zinc-300 ring-zinc-500/30',
-  active: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  retired: 'bg-zinc-500/15 text-zinc-300 ring-zinc-500/30',
-  reference: 'bg-sky-500/15 text-sky-300 ring-sky-500/30',
-  new: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  contacted: 'bg-sky-500/15 text-sky-300 ring-sky-500/30',
-  closed: 'bg-zinc-500/15 text-zinc-300 ring-zinc-500/30',
+  available: 'bg-emerald-600 text-white',
+  reserved: 'bg-amber-500 text-white',
+  sold: 'bg-neutral-400 text-white',
+  current: 'bg-emerald-600 text-white',
+  planned: 'bg-foreground text-background',
+  past: 'bg-neutral-400 text-white',
+  active: 'bg-emerald-600 text-white',
+  retired: 'bg-neutral-400 text-white',
+  reference: 'bg-foreground text-background',
+  new: 'bg-emerald-600 text-white',
+  contacted: 'bg-foreground text-background',
+  closed: 'bg-neutral-400 text-white',
 };
 
 export const StatusBadge = ({ status, className }: { status: string; className?: string }) => (
   <span
     className={cn(
       `
-        inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-        capitalize ring-1 ring-inset
+        inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
+        capitalize
       `,
-      styles[status] ?? 'bg-mako-surface text-mako-muted ring-mako-border',
+      styles[status] ?? 'bg-secondary text-secondary-foreground',
       className,
     )}
   >

@@ -1,24 +1,31 @@
 import { Brand } from '../Brand';
 
 /**
- * Lightweight, dependency-free Instagram feature block. Links straight to her
- * live profile so the site never looks stale between manual updates. (The full
- * embed script from `ig-embed.html` can be dropped in later if desired.)
+ * Instagram feature block — links straight to her live profile so the site
+ * never looks stale between manual updates.
  */
 export const InstagramBlock = () => (
-  <section className="border-t border-mako-border bg-mako-charcoal">
-    <div className="mx-auto max-w-6xl px-4 py-16 text-center">
+  <section className="bg-foreground text-background">
+    <div className="
+      mx-auto max-w-4xl px-6 py-24 text-center
+      md:py-32
+    "
+    >
       <p className="
-        text-sm font-semibold tracking-[0.2em] text-mako-gold uppercase
+        text-xs font-medium tracking-[0.25em] text-background/60 uppercase
       "
       >
         Follow along
       </p>
-      <h2 className="mt-2 font-serif text-3xl font-bold text-mako-cream">
+      <h2 className="
+        mt-3 font-display text-4xl font-semibold
+        md:text-5xl
+      "
+      >
         @
         {Brand.instagramHandle}
       </h2>
-      <p className="mx-auto mt-3 max-w-xl text-mako-muted">
+      <p className="mx-auto mt-4 max-w-xl text-background/70">
         Join
         {' '}
         {Brand.followers}
@@ -30,9 +37,9 @@ export const InstagramBlock = () => (
         target="_blank"
         rel="noopener noreferrer"
         className="
-          mt-6 inline-flex items-center gap-2 rounded-full bg-mako-gold px-6
-          py-3 font-semibold text-mako-ink transition-colors
-          hover:bg-mako-gold-soft
+          mt-8 inline-flex items-center gap-2 rounded-full bg-background px-7
+          py-3 font-medium text-foreground transition-opacity
+          hover:opacity-90
         "
       >
         View our Instagram

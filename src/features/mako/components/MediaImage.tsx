@@ -36,16 +36,13 @@ export const MediaImage = ({ src, alt, label, className, rounded = true }: Media
   return (
     <div
       className={cn(
-        `
-          flex size-full items-center justify-center bg-linear-to-br
-          from-mako-charcoal to-mako-ink
-        `,
+        'flex size-full items-center justify-center bg-neutral-200',
         rounded && 'rounded-xl',
         className,
       )}
     >
       <span className="
-        font-serif text-4xl font-semibold tracking-widest text-mako-gold/70
+        font-display text-4xl font-semibold tracking-widest text-neutral-400
       "
       >
         {initials || 'MK'}

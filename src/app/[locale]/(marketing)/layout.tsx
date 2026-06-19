@@ -11,7 +11,7 @@ export default async function MarketingLayout(props: {
   setRequestLocale(locale);
 
   return (
-    <div className="min-h-screen bg-mako-ink text-mako-cream">
+    <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <main>{props.children}</main>
       <SiteFooter />

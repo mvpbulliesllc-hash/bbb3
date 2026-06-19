@@ -25,12 +25,18 @@ export default async function ContactPage(props: Props) {
     <>
       <PageHeader eyebrow="Get in touch" title="Contact" />
       <div className="
-        mx-auto grid max-w-6xl gap-12 px-4 py-16
-        lg:grid-cols-2
+        mx-auto grid max-w-6xl gap-12 px-6 pb-24
+        md:px-12
+        lg:grid-cols-2 lg:px-20
       "
       >
         <div>
-          <p className="leading-relaxed whitespace-pre-line text-mako-muted">{settings.contact_intro}</p>
+          <p className="
+            leading-relaxed whitespace-pre-line text-muted-foreground
+          "
+          >
+            {settings.contact_intro}
+          </p>
 
           <div className="mt-8 space-y-4">
             <a
@@ -38,15 +44,15 @@ export default async function ContactPage(props: Props) {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                flex items-center gap-3 rounded-xl border border-mako-border
-                bg-mako-charcoal p-4 transition-colors
-                hover:border-mako-gold
+                flex items-center gap-3 rounded-2xl border border-border p-4
+                transition-colors
+                hover:border-foreground
               "
             >
               <span className="text-2xl">💬</span>
               <span>
-                <span className="block text-sm text-mako-muted">WhatsApp (fastest)</span>
-                <span className="font-semibold text-mako-cream">{Brand.phone}</span>
+                <span className="block text-sm text-muted-foreground">WhatsApp (fastest)</span>
+                <span className="font-medium text-foreground">{Brand.phone}</span>
               </span>
             </a>
             <a
@@ -54,36 +60,36 @@ export default async function ContactPage(props: Props) {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                flex items-center gap-3 rounded-xl border border-mako-border
-                bg-mako-charcoal p-4 transition-colors
-                hover:border-mako-gold
+                flex items-center gap-3 rounded-2xl border border-border p-4
+                transition-colors
+                hover:border-foreground
               "
             >
               <span className="text-2xl">📸</span>
               <span>
-                <span className="block text-sm text-mako-muted">Instagram</span>
-                <span className="font-semibold text-mako-cream">
+                <span className="block text-sm text-muted-foreground">Instagram</span>
+                <span className="font-medium text-foreground">
                   @
                   {Brand.instagramHandle}
                 </span>
               </span>
             </a>
             <div className="
-              flex items-center gap-3 rounded-xl border border-mako-border
-              bg-mako-charcoal p-4
+              flex items-center gap-3 rounded-2xl border border-border p-4
             "
             >
               <span className="text-2xl">📍</span>
               <span>
-                <span className="block text-sm text-mako-muted">Location</span>
-                <span className="font-semibold text-mako-cream">{Brand.location}</span>
+                <span className="block text-sm text-muted-foreground">Location</span>
+                <span className="font-medium text-foreground">{Brand.location}</span>
               </span>
             </div>
           </div>
         </div>
 
         <div className="
-          rounded-2xl border border-mako-border bg-mako-charcoal p-8
+          rounded-2xl bg-secondary/50 p-8
+          md:p-10
         "
         >
           {sent
@@ -93,8 +99,8 @@ export default async function ContactPage(props: Props) {
                   text-center
                 "
                 >
-                  <p className="font-serif text-xl text-mako-cream">Thank you! 🐾</p>
-                  <p className="mt-2 text-mako-muted">
+                  <p className="font-display text-2xl text-foreground">Thank you! 🐾</p>
+                  <p className="mt-2 text-muted-foreground">
                     Your inquiry has been received. We'll get back to you personally — for the fastest reply, reach us on
                     WhatsApp.
                   </p>
@@ -102,7 +108,12 @@ export default async function ContactPage(props: Props) {
               )
             : (
                 <>
-                  <h2 className="font-serif text-2xl font-bold text-mako-cream">Send a message</h2>
+                  <h2 className="
+                    font-display text-2xl font-semibold text-foreground
+                  "
+                  >
+                    Send a message
+                  </h2>
                   <div className="mt-6">
                     <InquiryForm source="Contact page" redirectTo="/contact" />
                   </div>

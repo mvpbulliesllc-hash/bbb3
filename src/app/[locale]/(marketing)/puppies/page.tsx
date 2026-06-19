@@ -25,7 +25,12 @@ export default async function PuppiesPage(props: { params: Promise<{ locale: str
         title="Available Puppies"
         description="Reserve a puppy from our latest litters. Each puppy ships worldwide with full paperwork, vaccinations and our ongoing support."
       />
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="
+        mx-auto max-w-6xl px-6 pb-24
+        md:px-12
+        lg:px-20
+      "
+      >
         {all.length === 0
           ? (
               <EmptyState
@@ -37,7 +42,7 @@ export default async function PuppiesPage(props: { params: Promise<{ locale: str
               <>
                 {available.length > 0 && (
                   <div className="
-                    grid gap-6
+                    grid gap-8
                     sm:grid-cols-2
                     lg:grid-cols-3
                   "
@@ -50,13 +55,13 @@ export default async function PuppiesPage(props: { params: Promise<{ locale: str
                 {others.length > 0 && (
                   <div className="mt-16">
                     <h2 className="
-                      font-serif text-2xl font-bold text-mako-cream
+                      font-display text-2xl font-semibold text-foreground
                     "
                     >
                       Recently reserved & placed
                     </h2>
                     <div className="
-                      mt-8 grid gap-6
+                      mt-8 grid gap-8
                       sm:grid-cols-2
                       lg:grid-cols-3
                     "
@@ -70,13 +75,9 @@ export default async function PuppiesPage(props: { params: Promise<{ locale: str
               </>
             )}
 
-        <div className="
-          mt-16 rounded-2xl border border-mako-border bg-mako-charcoal p-8
-          text-center
-        "
-        >
-          <h2 className="font-serif text-2xl font-bold text-mako-cream">Don't see the one?</h2>
-          <p className="mx-auto mt-2 max-w-lg text-mako-muted">
+        <div className="mt-20 rounded-2xl bg-secondary/50 p-10 text-center">
+          <h2 className="font-display text-3xl font-semibold text-foreground">Don't see the one?</h2>
+          <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
             Join our waitlist and we'll match you with an upcoming puppy from a planned litter.
           </p>
           <a
@@ -84,9 +85,9 @@ export default async function PuppiesPage(props: { params: Promise<{ locale: str
             target="_blank"
             rel="noopener noreferrer"
             className="
-              mt-6 inline-block rounded-full bg-mako-gold px-6 py-3
-              font-semibold text-mako-ink transition-colors
-              hover:bg-mako-gold-soft
+              mt-6 inline-block rounded-full bg-foreground px-7 py-3 font-medium
+              text-background transition-opacity
+              hover:opacity-80
             "
           >
             Join the waitlist on WhatsApp

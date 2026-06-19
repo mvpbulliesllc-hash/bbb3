@@ -30,31 +30,44 @@ export default async function ShippingPage(props: { params: Promise<{ locale: st
         title="Shipping & Import"
         description={`We ship from ${Brand.location} to approved homes worldwide — including the USA, Canada, the UK and across Europe.`}
       />
-      <div className="mx-auto max-w-3xl px-4 py-16">
-        <div className="leading-relaxed whitespace-pre-line text-mako-muted">{settings.shipping_body}</div>
-
+      <div className="
+        mx-auto max-w-3xl px-6 pb-24
+        md:px-12
+      "
+      >
         <div className="
-          mt-12 rounded-2xl border border-mako-border bg-mako-charcoal p-8
+          leading-relaxed whitespace-pre-line text-muted-foreground
         "
         >
-          <h2 className="font-serif text-2xl font-bold text-mako-cream">What's included</h2>
+          {settings.shipping_body}
+        </div>
+
+        <div className="
+          mt-14 rounded-2xl bg-secondary/50 p-8
+          md:p-10
+        "
+        >
+          <h2 className="font-display text-2xl font-semibold text-foreground">What's included</h2>
           <ul className="
             mt-6 grid gap-3
             sm:grid-cols-2
           "
           >
             {included.map(item => (
-              <li key={item} className="flex items-start gap-2 text-mako-muted">
-                <span className="mt-1 text-mako-gold">✓</span>
+              <li
+                key={item}
+                className="flex items-start gap-2 text-muted-foreground"
+              >
+                <span className="mt-0.5 text-foreground">✓</span>
                 <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="mt-12 text-center">
-          <h2 className="font-serif text-2xl font-bold text-mako-cream">Get a shipping quote</h2>
-          <p className="mx-auto mt-2 max-w-lg text-mako-muted">
+        <div className="mt-14 text-center">
+          <h2 className="font-display text-2xl font-semibold text-foreground">Get a shipping quote</h2>
+          <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
             Tell us your country and we'll provide a personalized transport quote and timeline.
           </p>
           <a
@@ -62,9 +75,9 @@ export default async function ShippingPage(props: { params: Promise<{ locale: st
             target="_blank"
             rel="noopener noreferrer"
             className="
-              mt-6 inline-block rounded-full bg-mako-gold px-6 py-3
-              font-semibold text-mako-ink transition-colors
-              hover:bg-mako-gold-soft
+              mt-6 inline-block rounded-full bg-foreground px-7 py-3 font-medium
+              text-background transition-opacity
+              hover:opacity-80
             "
           >
             Request a quote on WhatsApp

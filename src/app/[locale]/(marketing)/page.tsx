@@ -5,7 +5,11 @@ import { DogCard } from '@/features/mako/components/DogCard';
 import { InstagramBlock } from '@/features/mako/components/InstagramBlock';
 import { LitterCard } from '@/features/mako/components/LitterCard';
 import { PuppyCard } from '@/features/mako/components/PuppyCard';
-import { getFeaturedDogs, getLitters, getPuppies, getSettings } from '@/features/mako/queries';
+import { getFeaturedDogs, getGallery, getLitters, getPuppies, getSettings } from '@/features/mako/queries';
+import { GalleryScroll } from '@/features/mako/sections/GalleryScroll';
+import { Hero } from '@/features/mako/sections/Hero';
+import { Philosophy } from '@/features/mako/sections/Philosophy';
+import { StatementReveal } from '@/features/mako/sections/StatementReveal';
 import { Link } from '@/libs/I18nNavigation';
 
 type Props = { params: Promise<{ locale: string }> };
@@ -17,163 +21,114 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const stats = [
-  { value: `Since ${Brand.since}`, label: `${Brand.registry} breeder` },
-  { value: Brand.followers, label: 'Instagram followers' },
-  { value: 'Worldwide', label: 'Shipping & import' },
-  { value: 'Health · Structure', label: 'Our standard' },
-];
-
 export default async function Home(props: Props) {
   const { locale } = await props.params;
   setRequestLocale(locale);
 
-  const [settings, featured, currentLitters, plannedLitters, puppies] = await Promise.all([
+  const [settings, featured, currentLitters, plannedLitters, puppies, gallery] = await Promise.all([
     getSettings(),
     getFeaturedDogs(),
     getLitters('current'),
     getLitters('planned'),
     getPuppies('available'),
+    getGallery(),
   ]);
 
   const litters = [...currentLitters, ...plannedLitters].slice(0, 2);
+  const availablePuppies = puppies.slice(0, 3);
+
+  // Collect imagery for the hero + philosophy from featured dogs and the gallery.
+  const dogImages = featured.map(d => d.heroImage).filter((s): s is string => !!s);
+  const galleryImages = gallery.filter(g => g.kind === 'image').map(g => g.url);
+  const pool = [...dogImages, ...galleryImages];
+  const heroCenter = pool[0];
+  const heroLeft = [pool[1], pool[2]].filter(Boolean) as string[];
+  const heroRight = [pool[3], pool[4]].filter(Boolean) as string[];
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-mako-border">
-        <div className="
-          absolute inset-0 bg-linear-to-b from-mako-charcoal via-mako-ink
-          to-mako-ink
-        "
-        />
-        <div className="
-          relative mx-auto max-w-6xl px-4 py-24 text-center
-          sm:py-32
-        "
-        >
-          <p className="
-            text-sm font-semibold tracking-[0.25em] text-mako-gold uppercase
-          "
-          >
-            {Brand.registry}
-            {' '}
-            ·
-            {' '}
-            {Brand.location}
-            {' '}
-            ·
-            {' '}
-            Since
-            {' '}
-            {Brand.since}
-          </p>
-          <h1 className="
-            mx-auto mt-4 max-w-4xl font-serif text-4xl font-bold text-mako-cream
-            sm:text-6xl
-          "
-          >
-            {settings.hero_headline}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-mako-muted">{settings.hero_subhead}</p>
-          <div className="
-            mt-10 flex flex-wrap items-center justify-center gap-4
-          "
-          >
-            <Link
-              href="/puppies"
-              className="
-                rounded-full bg-mako-gold px-7 py-3 font-semibold text-mako-ink
-                transition-colors
-                hover:bg-mako-gold-soft
-              "
-            >
-              Available Puppies
-            </Link>
-            <a
-              href={whatsappLink('Hi Mako Kennel! I would like more information.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-                rounded-full border border-mako-border px-7 py-3 font-semibold
-                text-mako-cream transition-colors
-                hover:border-mako-gold
-              "
-            >
-              Message on WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
+      <Hero
+        centerImage={heroCenter}
+        leftImages={heroLeft}
+        rightImages={heroRight}
+        tagline={settings.hero_subhead}
+      />
 
-      {/* Stats */}
-      <section className="border-b border-mako-border bg-mako-charcoal">
-        <div className="
-          mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10
-          lg:grid-cols-4
-        "
-        >
-          {stats.map(s => (
-            <div key={s.label} className="text-center">
-              <div className="font-serif text-2xl font-bold text-mako-gold">{s.value}</div>
-              <div className="mt-1 text-sm text-mako-muted">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Philosophy leftImage={pool[5] ?? heroCenter} rightImage={pool[6] ?? heroLeft[0]} />
 
       {/* Featured dogs */}
       {featured.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 py-20">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="
-                text-sm font-semibold tracking-[0.2em] text-mako-gold uppercase
-              "
+        <section className="
+          bg-background px-6 py-20
+          md:px-12 md:py-28
+          lg:px-20
+        "
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="
+                  text-xs tracking-[0.25em] text-muted-foreground uppercase
+                "
+                >
+                  Our dogs
+                </p>
+                <h2 className="
+                  mt-3 font-display text-4xl font-semibold tracking-tight
+                  text-foreground
+                  md:text-5xl
+                "
+                >
+                  Featured bloodlines
+                </h2>
+              </div>
+              <Link
+                href="/studs"
+                className="
+                  text-sm text-muted-foreground transition-colors
+                  hover:text-foreground
+                "
               >
-                Our dogs
-              </p>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-mako-cream">Featured bloodlines</h2>
+                View all studs →
+              </Link>
             </div>
-            <Link
-              href="/studs"
-              className="
-                hidden text-sm text-mako-muted
-                hover:text-mako-gold
-                sm:block
-              "
+            <div className="
+              mt-12 grid gap-8
+              sm:grid-cols-2
+              lg:grid-cols-4
+            "
             >
-              View all studs →
-            </Link>
-          </div>
-          <div className="
-            mt-10 grid gap-6
-            sm:grid-cols-2
-            lg:grid-cols-4
-          "
-          >
-            {featured.map(dog => (
-              <DogCard key={dog.id} dog={dog} />
-            ))}
+              {featured.map(dog => (
+                <DogCard key={dog.id} dog={dog} />
+              ))}
+            </div>
           </div>
         </section>
       )}
 
+      <StatementReveal text={settings.about_body} />
+
       {/* Litters */}
       {litters.length > 0 && (
-        <section className="border-y border-mako-border bg-mako-charcoal">
-          <div className="mx-auto max-w-6xl px-4 py-20">
-            <div className="flex items-end justify-between">
+        <section className="
+          bg-background px-6 py-20
+          md:px-12 md:py-28
+          lg:px-20
+        "
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="
-                  text-sm font-semibold tracking-[0.2em] text-mako-gold
-                  uppercase
+                  text-xs tracking-[0.25em] text-muted-foreground uppercase
                 "
                 >
                   Breeding program
                 </p>
                 <h2 className="
-                  mt-2 font-serif text-3xl font-bold text-mako-cream
+                  mt-3 font-display text-4xl font-semibold tracking-tight
+                  text-foreground
+                  md:text-5xl
                 "
                 >
                   Current & planned litters
@@ -182,16 +137,15 @@ export default async function Home(props: Props) {
               <Link
                 href="/litters"
                 className="
-                  hidden text-sm text-mako-muted
-                  hover:text-mako-gold
-                  sm:block
+                  text-sm text-muted-foreground transition-colors
+                  hover:text-foreground
                 "
               >
                 All litters →
               </Link>
             </div>
             <div className="
-              mt-10 grid gap-6
+              mt-12 grid gap-10
               lg:grid-cols-2
             "
             >
@@ -204,66 +158,75 @@ export default async function Home(props: Props) {
       )}
 
       {/* Available puppies */}
-      {puppies.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 py-20">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="
-                text-sm font-semibold tracking-[0.2em] text-mako-gold uppercase
-              "
+      {availablePuppies.length > 0 && (
+        <section className="
+          bg-secondary/40 px-6 py-20
+          md:px-12 md:py-28
+          lg:px-20
+        "
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="
+                  text-xs tracking-[0.25em] text-muted-foreground uppercase
+                "
+                >
+                  Storefront
+                </p>
+                <h2 className="
+                  mt-3 font-display text-4xl font-semibold tracking-tight
+                  text-foreground
+                  md:text-5xl
+                "
+                >
+                  Available now
+                </h2>
+              </div>
+              <Link
+                href="/puppies"
+                className="
+                  text-sm text-muted-foreground transition-colors
+                  hover:text-foreground
+                "
               >
-                Storefront
-              </p>
-              <h2 className="mt-2 font-serif text-3xl font-bold text-mako-cream">Available now</h2>
+                All puppies →
+              </Link>
             </div>
-            <Link
-              href="/puppies"
-              className="
-                hidden text-sm text-mako-muted
-                hover:text-mako-gold
-                sm:block
-              "
+            <div className="
+              mt-12 grid gap-8
+              sm:grid-cols-2
+              lg:grid-cols-3
+            "
             >
-              All puppies →
-            </Link>
-          </div>
-          <div className="
-            mt-10 grid gap-6
-            sm:grid-cols-2
-            lg:grid-cols-4
-          "
-          >
-            {puppies.slice(0, 4).map(puppy => (
-              <PuppyCard key={puppy.id} puppy={puppy} />
-            ))}
+              {availablePuppies.map(puppy => (
+                <PuppyCard key={puppy.id} puppy={puppy} />
+              ))}
+            </div>
           </div>
         </section>
       )}
 
-      {/* About */}
-      <section className="border-t border-mako-border bg-mako-charcoal">
-        <div className="mx-auto max-w-3xl px-4 py-20 text-center">
-          <p className="
-            text-sm font-semibold tracking-[0.2em] text-mako-gold uppercase
-          "
-          >
-            About Mako Kennel
-          </p>
-          <p className="
-            mt-6 text-lg/relaxed whitespace-pre-line text-mako-muted
-          "
-          >
-            {settings.about_body}
-          </p>
-        </div>
-      </section>
+      {/* Horizontal gallery rail */}
+      {galleryImages.length > 1 && <GalleryScroll images={galleryImages} />}
 
       <InstagramBlock />
 
       {/* CTA */}
-      <section className="mx-auto max-w-4xl px-4 py-20 text-center">
-        <h2 className="font-serif text-3xl font-bold text-mako-cream">Ready to find your XL Bully?</h2>
-        <p className="mx-auto mt-4 max-w-xl text-mako-muted">
+      <section className="
+        bg-background px-6 py-24 text-center
+        md:py-32
+      "
+      >
+        <h2 className="
+          mx-auto max-w-3xl font-display text-4xl font-semibold tracking-tight
+          text-foreground
+          md:text-5xl
+        "
+        >
+          Ready to find your XL Bully?
+        </h2>
+        <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
           Tell us what you're looking for and we'll guide you through availability, the reservation process and worldwide
           shipping.
         </p>
@@ -271,23 +234,25 @@ export default async function Home(props: Props) {
           <Link
             href="/contact"
             className="
-              rounded-full bg-mako-gold px-7 py-3 font-semibold text-mako-ink
-              transition-colors
-              hover:bg-mako-gold-soft
+              rounded-full bg-foreground px-7 py-3 font-medium text-background
+              transition-opacity
+              hover:opacity-80
             "
           >
             Contact us
           </Link>
-          <Link
-            href="/shipping"
+          <a
+            href={whatsappLink('Hi Mako Kennel! I would like more information.')}
+            target="_blank"
+            rel="noopener noreferrer"
             className="
-              rounded-full border border-mako-border px-7 py-3 font-semibold
-              text-mako-cream transition-colors
-              hover:border-mako-gold
+              rounded-full border border-border px-7 py-3 font-medium
+              text-foreground transition-colors
+              hover:border-foreground
             "
           >
-            Shipping info
-          </Link>
+            Message on WhatsApp
+          </a>
         </div>
       </section>
     </>

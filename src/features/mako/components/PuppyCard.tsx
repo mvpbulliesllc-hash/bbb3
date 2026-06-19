@@ -1,52 +1,65 @@
 import type { puppiesSchema } from '@/models/Schema';
 import { whatsappLink } from '../Brand';
-import { MediaImage } from './MediaImage';
+import { FadeImage } from './FadeImage';
 import { StatusBadge } from './StatusBadge';
 
 type Puppy = typeof puppiesSchema.$inferSelect;
 
 export const PuppyCard = ({ puppy }: { puppy: Puppy }) => (
-  <div className="
-    overflow-hidden rounded-2xl border border-mako-border bg-mako-charcoal
-  "
-  >
-    <div className="relative aspect-square overflow-hidden">
-      <MediaImage src={puppy.heroImage} alt={puppy.name} label={puppy.name} rounded={false} />
-      <div className="absolute top-3 right-3">
+  <div className="group">
+    <div className="
+      relative aspect-2/3 overflow-hidden rounded-2xl bg-secondary
+    "
+    >
+      <FadeImage
+        src={puppy.heroImage}
+        alt={puppy.name}
+        label={puppy.name}
+        className="
+          transition-transform duration-700
+          group-hover:scale-105
+        "
+      />
+      <div className="absolute top-4 right-4">
         <StatusBadge status={puppy.status} />
       </div>
     </div>
-    <div className="p-5">
-      <h3 className="font-serif text-lg font-semibold text-mako-cream">{puppy.name}</h3>
-      <p className="mt-1 text-sm text-mako-muted">
-        {[puppy.sex, puppy.color].filter(Boolean).join(' · ')}
-      </p>
+    <div className="py-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <h3 className="font-display text-lg font-medium text-foreground">{puppy.name}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{[puppy.sex, puppy.color].filter(Boolean).join(' · ')}</p>
+        </div>
+        <span className="font-display text-xl font-medium text-foreground">{puppy.price || 'Inquire'}</span>
+      </div>
       {puppy.description && (
-        <p className="mt-2 line-clamp-2 text-sm text-mako-muted">
+        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
           {puppy.description}
         </p>
       )}
-      <div className="mt-4 flex items-center justify-between">
-        <span className="font-semibold text-mako-gold">{puppy.price || 'Inquire'}</span>
-        {puppy.status === 'available'
-          ? (
-              <a
-                href={whatsappLink(`Hi! I'm interested in puppy "${puppy.name}". Is it still available?`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  rounded-full bg-mako-gold px-3 py-1.5 text-sm font-semibold
-                  text-mako-ink transition-colors
-                  hover:bg-mako-gold-soft
-                "
-              >
-                Inquire
-              </a>
-            )
-          : (
-              <span className="text-sm text-mako-muted capitalize">{puppy.status}</span>
-            )}
-      </div>
+      {puppy.status === 'available'
+        ? (
+            <a
+              href={whatsappLink(`Hi! I'm interested in puppy "${puppy.name}". Is it still available?`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                mt-4 inline-block rounded-full bg-foreground px-5 py-2 text-sm
+                font-medium text-background transition-opacity
+                hover:opacity-80
+              "
+            >
+              Inquire
+            </a>
+          )
+        : (
+            <span className="
+              mt-4 inline-block text-sm text-muted-foreground capitalize
+            "
+            >
+              {puppy.status}
+            </span>
+          )}
     </div>
   </div>
 );

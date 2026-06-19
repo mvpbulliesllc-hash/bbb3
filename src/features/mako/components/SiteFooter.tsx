@@ -1,137 +1,152 @@
 import { Link } from '@/libs/I18nNavigation';
 import { Brand, navLinks, whatsappLink } from '../Brand';
 
+const half = Math.ceil(navLinks.length / 2);
+
 export const SiteFooter = () => (
-  <footer className="border-t border-mako-border bg-mako-ink">
+  <footer className="bg-background">
     <div className="
-      mx-auto grid max-w-6xl gap-10 px-4 py-14
-      sm:grid-cols-2
-      lg:grid-cols-4
+      border-t border-border px-6 py-16
+      md:px-12 md:py-20
+      lg:px-20
     "
     >
-      <div className="lg:col-span-2">
+      <div className="
+        grid grid-cols-2 gap-12
+        md:grid-cols-4
+        lg:grid-cols-5
+      "
+      >
         <div className="
-          font-serif text-xl font-bold tracking-wide text-mako-cream
+          col-span-2
+          md:col-span-2
+          lg:col-span-2
         "
         >
-          MAKO
-          {' '}
-          <span className="text-mako-gold">KENNEL</span>
+          <Link
+            href="/"
+            className="font-display text-xl font-semibold text-foreground"
+          >
+            Mako Kennel
+          </Link>
+          <p className="mt-4 max-w-xs text-sm/relaxed text-muted-foreground">
+            {Brand.tagline}
+            .
+            {' '}
+            Professional
+            {' '}
+            {Brand.registry}
+            {' '}
+            breeder since
+            {' '}
+            {Brand.since}
+            , based in
+            {' '}
+            {Brand.location}
+            .
+            {' '}
+            {Brand.standards}
+            .
+          </p>
         </div>
-        <p className="mt-3 max-w-sm text-sm text-mako-muted">
-          {Brand.tagline}
-          .
-          {' '}
-          Professional
-          {' '}
-          {Brand.registry}
-          {' '}
-          breeder since
-          {' '}
-          {Brand.since}
-          , based in
-          {' '}
-          {Brand.location}
-          .
-          {' '}
-          {Brand.standards}
-          .
-        </p>
-        <p className="mt-4 text-sm text-mako-muted">
-          We ship
-          {' '}
-          {Brand.ships.toLowerCase()}
-          {' '}
-          to approved homes.
-        </p>
-      </div>
 
-      <div>
-        <h4 className="
-          text-sm font-semibold tracking-wide text-mako-cream uppercase
-        "
-        >
-          Explore
-        </h4>
-        <ul className="mt-4 space-y-2">
-          {navLinks.map(link => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
+        <div>
+          <h4 className="mb-4 text-sm font-medium text-foreground">Explore</h4>
+          <ul className="space-y-3">
+            {navLinks.slice(0, half).map(link => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="
+                    text-sm text-muted-foreground transition-colors
+                    hover:text-foreground
+                  "
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-4 text-sm font-medium text-foreground">More</h4>
+          <ul className="space-y-3">
+            {navLinks.slice(half).map(link => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="
+                    text-sm text-muted-foreground transition-colors
+                    hover:text-foreground
+                  "
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-4 text-sm font-medium text-foreground">Contact</h4>
+          <ul className="space-y-3 text-sm">
+            <li>
+              <a
                 className="
-                  text-sm text-mako-muted transition-colors
-                  hover:text-mako-gold
+                  text-muted-foreground transition-colors
+                  hover:text-foreground
                 "
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                {link.label}
-              </Link>
+                WhatsApp
+              </a>
             </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h4 className="
-          text-sm font-semibold tracking-wide text-mako-cream uppercase
-        "
-        >
-          Contact
-        </h4>
-        <ul className="mt-4 space-y-2 text-sm text-mako-muted">
-          <li>
-            <a
-              className="
-                transition-colors
-                hover:text-mako-gold
-              "
-              href={whatsappLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp:
-              {' '}
-              {Brand.phone}
-            </a>
-          </li>
-          <li>
-            <a
-              className="
-                transition-colors
-                hover:text-mako-gold
-              "
-              href={Brand.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Instagram @
-              {Brand.instagramHandle}
-            </a>
-          </li>
-          <li>
-            <a
-              className="
-                transition-colors
-                hover:text-mako-gold
-              "
-              href={Brand.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Facebook
-            </a>
-          </li>
-        </ul>
+            <li>
+              <a
+                className="
+                  text-muted-foreground transition-colors
+                  hover:text-foreground
+                "
+                href={Brand.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a
+                className="
+                  text-muted-foreground transition-colors
+                  hover:text-foreground
+                "
+                href={Brand.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Facebook
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div className="border-t border-mako-border">
+    <div className="
+      border-t border-border p-6
+      md:px-12
+      lg:px-20
+    "
+    >
       <div className="
-        mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4
-        py-6 text-xs text-mako-muted
-        sm:flex-row
+        flex flex-col items-center justify-between gap-3
+        md:flex-row
       "
       >
-        <p>
+        <p className="text-xs text-muted-foreground">
           ©
           {' '}
           {new Date().getFullYear()}
@@ -139,12 +154,16 @@ export const SiteFooter = () => (
           {Brand.legalName}
           . All rights reserved.
         </p>
-        <p>
+        <p className="text-xs text-muted-foreground">
           {Brand.registry}
           {' '}
           registered ·
           {' '}
           {Brand.location}
+          {' '}
+          ·
+          {' '}
+          {Brand.phone}
         </p>
       </div>
     </div>

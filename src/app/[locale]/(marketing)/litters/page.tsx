@@ -28,7 +28,12 @@ export default async function LittersPage(props: { params: Promise<{ locale: str
         title="Litters"
         description="Our current and upcoming pairings. Join a waitlist early to reserve from a planned litter."
       />
-      <div className="mx-auto max-w-6xl space-y-16 px-4 py-16">
+      <div className="
+        mx-auto max-w-6xl space-y-20 px-6 pb-24
+        md:px-12
+        lg:px-20
+      "
+      >
         {all.length === 0 && (
           <EmptyState title="Litters coming soon" description="Current and planned litters will appear here." />
         )}
@@ -39,9 +44,14 @@ export default async function LittersPage(props: { params: Promise<{ locale: str
           }
           return (
             <div key={section.status}>
-              <h2 className="font-serif text-2xl font-bold text-mako-cream">{section.title}</h2>
+              <h2 className="
+                font-display text-3xl font-semibold text-foreground
+              "
+              >
+                {section.title}
+              </h2>
               <div className="
-                mt-8 grid gap-6
+                mt-10 grid gap-10
                 lg:grid-cols-2
               "
               >

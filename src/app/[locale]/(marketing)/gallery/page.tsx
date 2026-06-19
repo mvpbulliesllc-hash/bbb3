@@ -19,7 +19,12 @@ export default async function GalleryPage(props: { params: Promise<{ locale: str
   return (
     <>
       <PageHeader eyebrow="Showcase" title="Gallery" description="A look at our dogs, puppies and the famous white panther." />
-      <div className="mx-auto max-w-6xl px-4 py-16">
+      <div className="
+        mx-auto max-w-6xl px-6 pb-24
+        md:px-12
+        lg:px-20
+      "
+      >
         {items.length > 0
           ? (
               <div className="
@@ -38,8 +43,8 @@ export default async function GalleryPage(props: { params: Promise<{ locale: str
                           rel="noopener noreferrer"
                           className="
                             flex aspect-square items-center justify-center
-                            rounded-xl border border-mako-border
-                            bg-mako-charcoal text-mako-gold
+                            rounded-2xl bg-foreground text-sm font-medium
+                            text-background
                           "
                         >
                           ▶ Watch video
@@ -49,8 +54,8 @@ export default async function GalleryPage(props: { params: Promise<{ locale: str
                         <div
                           key={item.id}
                           className="
-                            aspect-square overflow-hidden rounded-xl border
-                            border-mako-border
+                            aspect-square overflow-hidden rounded-2xl
+                            bg-secondary
                           "
                         >
                           <MediaImage src={item.url} alt={item.alt || 'Mako Kennel'} rounded={false} />
