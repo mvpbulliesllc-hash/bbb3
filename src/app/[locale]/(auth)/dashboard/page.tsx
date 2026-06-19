@@ -1,89 +1,88 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { PageMessage } from '@/features/dashboard/PageMessage';
+import Link from 'next/link';
 import { TitleBar } from '@/features/dashboard/TitleBar';
-import { SponsorLogos } from '@/features/sponsors/SponsorLogos';
+import { getDogs, getGallery, getLeads, getLitters, getPuppies } from '@/features/mako/queries';
 
-export default async function DashboardIndexPage(props: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await props.params;
-  setRequestLocale(locale);
-  const t = await getTranslations({
-    locale,
-    namespace: 'DashboardIndexPage',
-  });
+export default async function DashboardIndexPage() {
+  const [studs, females, litters, puppies, leads, gallery] = await Promise.all([
+    getDogs('stud'),
+    getDogs('female'),
+    getLitters(),
+    getPuppies(),
+    getLeads(),
+    getGallery(),
+  ]);
+
+  const newLeads = leads.filter(l => l.status === 'new').length;
+  const availablePuppies = puppies.filter(p => p.status === 'available').length;
+
+  const cards = [
+    { href: '/dashboard/dogs', label: 'Stud dogs', value: studs.length },
+    { href: '/dashboard/dogs', label: 'Females', value: females.length },
+    { href: '/dashboard/litters', label: 'Litters', value: litters.length },
+    { href: '/dashboard/puppies', label: 'Available puppies', value: availablePuppies },
+    { href: '/dashboard/leads', label: 'New inquiries', value: newLeads },
+    { href: '/dashboard/gallery', label: 'Gallery items', value: gallery.length },
+  ];
+
+  const quickLinks = [
+    { href: '/dashboard/dogs/new', label: 'Add a dog' },
+    { href: '/dashboard/litters/new', label: 'Add a litter' },
+    { href: '/dashboard/puppies/new', label: 'Add a puppy' },
+    { href: '/dashboard/gallery', label: 'Add photos' },
+    { href: '/dashboard/settings', label: 'Edit page content' },
+  ];
 
   return (
     <>
       <TitleBar
-        title={t('title_bar')}
-        description={t('title_bar_description')}
+        title="Welcome to your Mako Kennel admin"
+        description="Add and update your dogs, litters, puppies and photos — and follow up with inquiries — all without a developer."
       />
 
-      <PageMessage
-        icon={(
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M0 0h24v24H0z" stroke="none" />
-            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3M12 12l8-4.5M12 12v9M12 12L4 7.5" />
-          </svg>
-        )}
-        title={t('message_state_title')}
-        description={t.rich('message_state_description', {
-          code: chunks => (
-            <code className="bg-secondary text-secondary-foreground">
-              {chunks}
-            </code>
-          ),
-        })}
-        button={(
-          <>
-            <div className="
-              mt-2 text-sm font-light whitespace-pre-wrap text-muted-foreground
+      <div className="
+        grid gap-4
+        sm:grid-cols-2
+        lg:grid-cols-3
+      "
+      >
+        {cards.map(card => (
+          <Link
+            key={card.label}
+            href={card.href}
+            className="
+              rounded-xl border bg-card p-5 transition-colors
+              hover:border-primary
             "
+          >
+            <div className="text-3xl font-bold">{card.value}</div>
+            <div className="mt-1 text-sm text-muted-foreground">{card.label}</div>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-8 rounded-xl border bg-card p-6">
+        <h2 className="text-lg font-semibold">Quick actions</h2>
+        <div className="mt-4 flex flex-wrap gap-3">
+          {quickLinks.map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="
+                rounded-md bg-primary px-4 py-2 text-sm font-semibold
+                text-primary-foreground
+              "
             >
-              {t.rich('message_state_alternative', {
-                url: () => (
-                  <a
-                    className="
-                      text-blue-500
-                      hover:text-blue-600
-                    "
-                    href="https://nextjs-boilerplate.com/pro-saas-starter-kit"
-                  >
-                    Next.js Boilerplate SaaS
-                  </a>
-                ),
-              })}
-
-              <p>
-                {t.rich('max_message', {
-                  url: () => (
-                    <a
-                      className="
-                        text-blue-500
-                        hover:text-blue-600
-                      "
-                      href="https://nextjs-boilerplate.com/nextjs-multi-tenant-saas-boilerplate"
-                    >
-                      Next.js Boilerplate Max
-                    </a>
-                  ),
-                })}
-              </p>
-            </div>
-
-            <div className="mt-7">
-              <SponsorLogos />
-            </div>
-          </>
-        )}
-      />
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/"
+            className="rounded-md border px-4 py-2 text-sm font-semibold"
+          >
+            View live site →
+          </Link>
+        </div>
+      </div>
     </>
   );
-};
+}

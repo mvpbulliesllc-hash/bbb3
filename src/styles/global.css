@@ -36,6 +36,17 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  /* Mako Kennel brand palette — dark, premium, metallic accent. */
+  --color-mako-ink: #0a0a0c;
+  --color-mako-charcoal: #141417;
+  --color-mako-surface: #1b1b1f;
+  --color-mako-border: #2a2a30;
+  --color-mako-cream: #f4f1ea;
+  --color-mako-muted: #a7a39a;
+  --color-mako-gold: #c9a45c;
+  --color-mako-gold-soft: #e3c989;
+  --color-mako-silver: #c9ccd1;
 }
 
 :root {
