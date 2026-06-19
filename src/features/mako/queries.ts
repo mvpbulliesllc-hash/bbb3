@@ -2,6 +2,7 @@ import type { DogType, LitterStatus, PuppyStatus } from './types';
 import { asc, desc, eq } from 'drizzle-orm';
 import { db } from '@/libs/DB';
 import { dogsSchema, gallerySchema, leadsSchema, littersSchema, puppiesSchema, settingsSchema } from '@/models/Schema';
+import { demoDogs, demoGallery, demoLitters, demoPuppies, isDemoMode } from './demoContent';
 import { settingDefaults } from './settings';
 
 /**
@@ -17,15 +18,22 @@ async function safe<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   }
 }
 
+/** In demo mode, fall back to fixtures when the database returns nothing. */
+function withDemo<T>(rows: T[], demo: T[]): T[] {
+  return isDemoMode && rows.length === 0 ? demo : rows;
+}
+
 export const getDogs = (type?: DogType) =>
   safe(
-    () =>
-      db
+    async () => {
+      const rows = await db
         .select()
         .from(dogsSchema)
         .where(type ? eq(dogsSchema.type, type) : undefined)
-        .orderBy(asc(dogsSchema.sortOrder), asc(dogsSchema.name)),
-    [],
+        .orderBy(asc(dogsSchema.sortOrder), asc(dogsSchema.name));
+      return withDemo(rows, demoDogs.filter(d => !type || d.type === type));
+    },
+    withDemo([], demoDogs.filter(d => !type || d.type === type)),
   );
 
 export const getFeaturedDogs = () =>
@@ -36,16 +44,16 @@ export const getFeaturedDogs = () =>
         .from(dogsSchema)
         .where(eq(dogsSchema.featured, true))
         .orderBy(asc(dogsSchema.sortOrder), asc(dogsSchema.name));
-      return rows;
+      return withDemo(rows, demoDogs.filter(d => d.featured));
     },
-    [],
+    withDemo([], demoDogs.filter(d => d.featured)),
   );
 
 export const getDogBySlug = (slug: string) =>
   safe(async () => {
     const rows = await db.select().from(dogsSchema).where(eq(dogsSchema.slug, slug)).limit(1);
-    return rows[0] ?? null;
-  }, null);
+    return rows[0] ?? (isDemoMode ? demoDogs.find(d => d.slug === slug) ?? null : null);
+  }, isDemoMode ? demoDogs.find(d => d.slug === slug) ?? null : null);
 
 export const getDogById = (id: number) =>
   safe(async () => {
@@ -55,13 +63,15 @@ export const getDogById = (id: number) =>
 
 export const getLitters = (status?: LitterStatus) =>
   safe(
-    () =>
-      db
+    async () => {
+      const rows = await db
         .select()
         .from(littersSchema)
         .where(status ? eq(littersSchema.status, status) : undefined)
-        .orderBy(asc(littersSchema.sortOrder), desc(littersSchema.createdAt)),
-    [],
+        .orderBy(asc(littersSchema.sortOrder), desc(littersSchema.createdAt));
+      return withDemo(rows, demoLitters.filter(l => !status || l.status === status));
+    },
+    withDemo([], demoLitters.filter(l => !status || l.status === status)),
   );
 
 export const getLitterById = (id: number) =>
@@ -72,13 +82,15 @@ export const getLitterById = (id: number) =>
 
 export const getPuppies = (status?: PuppyStatus) =>
   safe(
-    () =>
-      db
+    async () => {
+      const rows = await db
         .select()
         .from(puppiesSchema)
         .where(status ? eq(puppiesSchema.status, status) : undefined)
-        .orderBy(asc(puppiesSchema.sortOrder), desc(puppiesSchema.createdAt)),
-    [],
+        .orderBy(asc(puppiesSchema.sortOrder), desc(puppiesSchema.createdAt));
+      return withDemo(rows, demoPuppies.filter(p => !status || p.status === status));
+    },
+    withDemo([], demoPuppies.filter(p => !status || p.status === status)),
   );
 
 export const getPuppyById = (id: number) =>
@@ -89,8 +101,11 @@ export const getPuppyById = (id: number) =>
 
 export const getGallery = () =>
   safe(
-    () => db.select().from(gallerySchema).orderBy(asc(gallerySchema.sortOrder), desc(gallerySchema.createdAt)),
-    [],
+    async () => {
+      const rows = await db.select().from(gallerySchema).orderBy(asc(gallerySchema.sortOrder), desc(gallerySchema.createdAt));
+      return withDemo(rows, demoGallery);
+    },
+    withDemo([], demoGallery),
   );
 
 export const getLeads = () =>
