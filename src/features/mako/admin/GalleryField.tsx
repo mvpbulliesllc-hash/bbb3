@@ -1,8 +1,8 @@
 'use client';
 
-import { upload } from '@vercel/blob/client';
 import { useRef, useState } from 'react';
 import { cn } from '@/utils/Helpers';
+import { uploadImage } from './uploadImage';
 
 const dropBase
   = 'flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-input bg-background px-4 py-6 text-center text-sm text-muted-foreground transition-colors cursor-pointer hover:border-ring';
@@ -34,11 +34,7 @@ export function GalleryField({
     try {
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
-        const blob = await upload(file.name, file, {
-          access: 'public',
-          handleUploadUrl: '/api/admin/upload',
-        });
-        uploaded.push(blob.url);
+        uploaded.push(await uploadImage(file));
       }
       setUrls(prev => [...prev, ...uploaded]);
     } catch (error_) {
