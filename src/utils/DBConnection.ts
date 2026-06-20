@@ -9,6 +9,9 @@ import * as schema from '@/models/Schema';
 export const createDbConnection = () => {
   const pool = new Pool({
     connectionString: Env.DATABASE_URL,
+    // Fail fast instead of hanging the build/request when the database is
+    // unreachable (read queries degrade gracefully — see features/mako/queries).
+    connectionTimeoutMillis: 5000,
   });
 
   pool.on('error', (error) => {

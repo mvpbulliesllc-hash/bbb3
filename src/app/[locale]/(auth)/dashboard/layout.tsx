@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import { DashboardHeader } from '@/features/dashboard/DashboardHeader';
 
 type DashboardLayoutProps = {
@@ -7,27 +7,14 @@ type DashboardLayoutProps = {
   children: React.ReactNode;
 };
 
-export async function generateMetadata(props: DashboardLayoutProps): Promise<Metadata> {
-  const { locale } = await props.params;
-  const t = await getTranslations({
-    locale,
-    namespace: 'DashboardLayout',
-  });
-
-  return {
-    title: t('meta_title'),
-    description: t('meta_description'),
-  };
-}
+export const metadata: Metadata = {
+  title: 'Mako Kennel — Admin',
+  description: 'Manage dogs, litters, puppies, photos and inquiries for Mako Kennel.',
+};
 
 export default async function DashboardLayout(props: DashboardLayoutProps) {
   const { locale } = await props.params;
   setRequestLocale(locale);
-
-  const t = await getTranslations({
-    locale,
-    namespace: 'DashboardLayout',
-  });
 
   return (
     <>
@@ -38,18 +25,13 @@ export default async function DashboardLayout(props: DashboardLayoutProps) {
         >
           <DashboardHeader
             menu={[
-              {
-                href: '/dashboard',
-                label: t('home'),
-              },
-              {
-                href: '/dashboard/organization-profile/organization-members',
-                label: t('members'),
-              },
-              {
-                href: '/dashboard/organization-profile',
-                label: t('settings'),
-              },
+              { href: '/dashboard', label: 'Overview' },
+              { href: '/dashboard/dogs', label: 'Dogs' },
+              { href: '/dashboard/litters', label: 'Litters' },
+              { href: '/dashboard/puppies', label: 'Puppies' },
+              { href: '/dashboard/gallery', label: 'Gallery' },
+              { href: '/dashboard/leads', label: 'Inquiries' },
+              { href: '/dashboard/settings', label: 'Settings' },
             ]}
           />
         </div>
