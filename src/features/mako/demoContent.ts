@@ -43,7 +43,7 @@ export const demoDogs: Dog[] = [
     studFee: 'Inquire',
     featured: true,
     heroImage: img('002'),
-    gallery: [img('042'), img('061')],
+    gallery: [img('042')],
     sortOrder: 1,
   },
   {
@@ -56,7 +56,7 @@ export const demoDogs: Dog[] = [
     bio: 'Our famous "white panther." As the youngest female in her category at the ABKC Show Tatry, she placed at all six shows with two 1st-place wins — confident movement, beautiful structure and the face of Mako Kennel.',
     featured: true,
     heroImage: img('005'),
-    gallery: [img('012'), img('085')],
+    gallery: [img('093'), img('085')],
     sortOrder: 2,
   },
   {
@@ -68,8 +68,8 @@ export const demoDogs: Dog[] = [
     color: 'Chocolate merle',
     bio: 'Our chocolate merle dam from the Bossy bloodline — 55 kg of structure, a massive head and a rare merle coat. The dam behind standout breedings, including Moncler × Euphoria.',
     featured: true,
-    heroImage: img('061'),
-    gallery: [img('046')],
+    heroImage: img('092'),
+    gallery: [img('095'), img('019')],
     sortOrder: 3,
   },
   {
@@ -83,7 +83,7 @@ export const demoDogs: Dog[] = [
     studFee: 'Inquire',
     featured: true,
     heroImage: img('104'),
-    gallery: [img('071')],
+    gallery: [img('019')],
     sortOrder: 4,
   },
 ];
