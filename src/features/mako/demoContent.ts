@@ -42,8 +42,8 @@ export const demoDogs: Dog[] = [
     bio: 'Our foundation lilac tri sire from the Bossy bloodline — celebrated for heavy bone, a massive head and rare coat. The father behind many of our standout dogs.',
     studFee: 'Inquire',
     featured: true,
-    heroImage: img('024'),
-    gallery: [img('002')],
+    heroImage: img('110'),
+    gallery: [img('024'), img('002')],
     sortOrder: 1,
   },
   {
