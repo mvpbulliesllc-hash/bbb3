@@ -121,7 +121,7 @@ export const demoLitters: Litter[] = [
     date: 'Born — first days',
     expectedColors: 'Merle females',
     description: 'On the ground! Euphoria × Moncler — gorgeous merle females in their first days. A pairing built for extreme structure, massive heads and that real XL bully presence. Waitlist open.',
-    heroImage: img('019'),
+    heroImage: '/images/moncler-euphoria.jpg',
     gallery: [img('046'), img('001'), img('100'), img('103'), img('038')],
     picks: picksFor(
       [7500, 6500, 6000, 5500, 5000, 4500],

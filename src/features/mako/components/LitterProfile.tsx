@@ -33,7 +33,13 @@ export const LitterProfile = ({ litter }: { litter: Litter }) => {
         relative h-[60vh] min-h-[420px] w-full overflow-hidden bg-secondary
       "
       >
-        <FadeImage src={litter.heroImage} alt={litter.name} label={litter.name} />
+        {litter.heroImage && (
+          <img
+            src={litter.heroImage}
+            alt={litter.name}
+            className="absolute inset-0 size-full object-cover"
+          />
+        )}
         <div className="
           absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-black/30
         "
