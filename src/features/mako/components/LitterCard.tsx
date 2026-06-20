@@ -1,4 +1,5 @@
 import type { littersSchema } from '@/models/Schema';
+import { Link } from '@/libs/I18nNavigation';
 import { FadeImage } from './FadeImage';
 import { StatusBadge } from './StatusBadge';
 
@@ -20,7 +21,7 @@ const Detail = ({ label, value }: { label: string; value?: string | null }) =>
     : null;
 
 export const LitterCard = ({ litter }: { litter: Litter }) => (
-  <div className="group overflow-hidden">
+  <Link href={`/litters/${litter.slug}`} className="group block overflow-hidden">
     <div className="
       relative aspect-16/10 overflow-hidden rounded-2xl bg-secondary
     "
@@ -47,10 +48,17 @@ export const LitterCard = ({ litter }: { litter: Litter }) => (
         <Detail label="Expected colors" value={litter.expectedColors} />
       </dl>
       {litter.description && (
-        <p className="mt-4 text-sm/relaxed text-muted-foreground">
+        <p className="mt-4 line-clamp-2 text-sm/relaxed text-muted-foreground">
           {litter.description}
         </p>
       )}
+      <span className="
+        mt-4 inline-block text-sm text-foreground underline-offset-4
+        group-hover:underline
+      "
+      >
+        View litter & pricing →
+      </span>
     </div>
-  </div>
+  </Link>
 );

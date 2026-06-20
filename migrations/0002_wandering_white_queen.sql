@@ -1,0 +1,1 @@
+ALTER TABLE "litters" ADD COLUMN "picks" jsonb DEFAULT '[]'::jsonb NOT NULL;

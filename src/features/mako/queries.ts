@@ -80,6 +80,15 @@ export const getLitterById = (id: number) =>
     return rows[0] ?? null;
   }, null);
 
+export const getLitterBySlug = (slug: string) =>
+  safe(
+    async () => {
+      const rows = await db.select().from(littersSchema).where(eq(littersSchema.slug, slug)).limit(1);
+      return rows[0] ?? (isDemoMode ? demoLitters.find(l => l.slug === slug) ?? null : null);
+    },
+    isDemoMode ? demoLitters.find(l => l.slug === slug) ?? null : null,
+  );
+
 export const getPuppies = (status?: PuppyStatus) =>
   safe(
     async () => {

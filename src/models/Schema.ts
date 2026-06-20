@@ -53,6 +53,14 @@ export const dogsSchema = pgTable('dogs', {
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
+/** A "pick of the litter" reservation slot with its price and availability. */
+export type LitterPick = {
+  sex: string; // 'Male' | 'Female'
+  pick: number; // 1..6
+  price: string; // free text, e.g. "$9,000"
+  status: string; // 'available' | 'reserved' | 'sold'
+};
+
 /** Current, planned and past litters. */
 export const littersSchema = pgTable('litters', {
   id: serial('id').primaryKey(),
@@ -66,6 +74,7 @@ export const littersSchema = pgTable('litters', {
   description: text('description').default(''),
   heroImage: text('hero_image').default(''),
   gallery: jsonb('gallery').$type<string[]>().notNull().default([]),
+  picks: jsonb('picks').$type<LitterPick[]>().notNull().default([]),
   sortOrder: integer('sort_order').notNull().default(0),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()
