@@ -22,9 +22,15 @@ async function main() {
   const db = drizzle(pool, { schema });
 
   try {
-    const existing = await db.select().from(schema.dogsSchema).limit(1);
+    const existing = await db.select().from(schema.dogsSchema);
     if (existing.length > 0) {
-      console.warn('seed: content already present — skipping.');
+      const litters = await db.select().from(schema.littersSchema);
+      const puppies = await db.select().from(schema.puppiesSchema);
+      const gallery = await db.select().from(schema.gallerySchema);
+      console.warn(
+        `seed: content already present — skipping. dogs=${existing.length} [${existing.map(d => d.slug).join(', ')}] `
+        + `litters=${litters.length} puppies=${puppies.length} gallery=${gallery.length}`,
+      );
       return;
     }
 
