@@ -4,6 +4,7 @@ import { Brand, whatsappLink } from '@/features/mako/Brand';
 import { DogCard } from '@/features/mako/components/DogCard';
 import { InstagramBlock } from '@/features/mako/components/InstagramBlock';
 import { LitterCard } from '@/features/mako/components/LitterCard';
+import { MuxVideoBlock } from '@/features/mako/components/MuxVideoBlock';
 import { PuppyCard } from '@/features/mako/components/PuppyCard';
 import { getFeaturedDogs, getGallery, getLitters, getPuppies, getSettings } from '@/features/mako/queries';
 import { GalleryScroll } from '@/features/mako/sections/GalleryScroll';
@@ -255,6 +256,9 @@ export default async function Home(props: Props) {
           </a>
         </div>
       </section>
+
+      {/* Full-width MUX video block */}
+      <MuxVideoBlock playbackId={settings.home_video_playback_id ?? ''} title={Brand.name} />
     </>
   );
 }
