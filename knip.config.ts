@@ -14,15 +14,12 @@ const config: KnipConfig = {
     '@swc/helpers', // Avoid error in CI: "`npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync."
     '@radix-ui/react-accordion', // Used by the ignored UI primitive src/components/ui/accordion.tsx
     '@radix-ui/react-icons', // Retained shadcn/ui peer dependency
+    'checkly', // Config kept (checkly.config.ts) though the CI workflow was removed
   ],
   // Include custom Playwright test file suffixes
   playwright: {
     entry: ['tests/**/*.@(integ|e2e).ts'],
   },
-  // Binaries to ignore during analysis
-  ignoreBinaries: [
-    'production', // False positive raised with dotenv-cli
-  ],
   compilers: {
     css: (text: string) => [...text.matchAll(/(?<=@)import[^;]+/g)].join('\n'),
   },
