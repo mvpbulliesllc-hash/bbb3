@@ -1,7 +1,8 @@
 import { TitleBar } from '@/features/dashboard/TitleBar';
 import { addGalleryItems, deleteGalleryItem } from '@/features/mako/actions';
 import { DeleteButton } from '@/features/mako/admin/DeleteButton';
-import { Field, Select, TextArea, TextInput } from '@/features/mako/admin/Fields';
+import { Field, TextInput } from '@/features/mako/admin/Fields';
+import { GalleryField } from '@/features/mako/admin/GalleryField';
 import { MediaImage } from '@/features/mako/components/MediaImage';
 import { getGallery } from '@/features/mako/queries';
 
@@ -15,24 +16,10 @@ export default async function AdminGalleryPage() {
       <div className="rounded-xl border bg-card p-6">
         <h2 className="text-lg font-semibold">Add items</h2>
         <form action={addGalleryItems} className="mt-4 space-y-5">
-          <Field label="Image / video URLs" hint="One URL per line — paste links to your photos or video.">
-            <TextArea name="urls" rows={4} required placeholder="https://…" />
+          <GalleryField name="urls" label="Photos" hint="Drag photos in or tap to choose — you can add several at once." />
+          <Field label="Caption / alt text">
+            <TextInput name="alt" placeholder="Optional description" />
           </Field>
-          <div className="
-            grid gap-5
-            sm:grid-cols-2
-          "
-          >
-            <Field label="Type">
-              <Select name="kind" defaultValue="image">
-                <option value="image">Image</option>
-                <option value="video">Video link</option>
-              </Select>
-            </Field>
-            <Field label="Caption / alt text">
-              <TextInput name="alt" placeholder="Optional description" />
-            </Field>
-          </div>
           <button
             type="submit"
             className="

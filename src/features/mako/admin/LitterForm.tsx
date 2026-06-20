@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { saveLitter } from '../actions';
 import { LITTER_STATUSES } from '../types';
 import { Field, Select, TextArea, TextInput } from './Fields';
+import { GalleryField } from './GalleryField';
+import { ImageField } from './ImageField';
+import { PicksField } from './PicksField';
 
 type Litter = typeof littersSchema.$inferSelect;
 
@@ -43,27 +46,11 @@ export const LitterForm = ({ litter }: { litter?: Litter }) => (
       <TextArea name="description" rows={4} defaultValue={litter?.description ?? ''} />
     </Field>
 
-    <Field label="Hero image URL">
-      <TextInput name="heroImage" defaultValue={litter?.heroImage ?? ''} placeholder="https://…" />
-    </Field>
+    <ImageField name="heroImage" label="Banner photo" hint="Shown across the top of the litter page." defaultValue={litter?.heroImage ?? ''} />
 
-    <Field label="Gallery image URLs" hint="One URL per line.">
-      <TextArea name="gallery" rows={3} defaultValue={(litter?.gallery ?? []).join('\n')} placeholder="https://…" />
-    </Field>
+    <GalleryField name="gallery" label="Puppy photos" defaultValue={litter?.gallery ?? []} />
 
-    <Field
-      label="Pick pricing"
-      hint="One pick per line: Sex | Pick number | Price | Status (available/reserved/sold). e.g. Male | 1 | $9,000 | available"
-    >
-      <TextArea
-        name="picks"
-        rows={6}
-        defaultValue={(litter?.picks ?? [])
-          .map(p => `${p.sex} | ${p.pick} | ${p.price} | ${p.status}`)
-          .join('\n')}
-        placeholder={'Male | 1 | $9,000 | available\nFemale | 1 | $10,000 | reserved'}
-      />
-    </Field>
+    <PicksField defaultValue={litter?.picks ?? []} />
 
     <Field
       label="Litter cam"

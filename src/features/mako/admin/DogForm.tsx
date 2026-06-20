@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { saveDog } from '../actions';
 import { DOG_STATUSES, DOG_TYPES } from '../types';
 import { Field, Select, TextArea, TextInput } from './Fields';
+import { GalleryField } from './GalleryField';
+import { ImageField } from './ImageField';
 
 type Dog = typeof dogsSchema.$inferSelect;
 
@@ -53,13 +55,9 @@ export const DogForm = ({ dog, defaultType }: { dog?: Dog; defaultType?: string 
       <TextArea name="bio" rows={4} defaultValue={dog?.bio ?? ''} />
     </Field>
 
-    <Field label="Hero image URL" hint="Paste an image link (e.g. from Instagram or your hosting).">
-      <TextInput name="heroImage" defaultValue={dog?.heroImage ?? ''} placeholder="https://…" />
-    </Field>
+    <ImageField name="heroImage" label="Main photo" hint="This is the photo shown on cards and at the top of the profile." defaultValue={dog?.heroImage ?? ''} />
 
-    <Field label="Gallery image URLs" hint="One URL per line.">
-      <TextArea name="gallery" rows={3} defaultValue={(dog?.gallery ?? []).join('\n')} placeholder="https://…" />
-    </Field>
+    <GalleryField name="gallery" label="More photos" defaultValue={dog?.gallery ?? []} />
 
     <div className="
       grid gap-5
