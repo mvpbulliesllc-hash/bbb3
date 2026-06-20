@@ -42,9 +42,12 @@ export default async function Home(props: Props) {
   const dogImages = featured.map(d => d.heroImage).filter((s): s is string => !!s);
   const galleryImages = gallery.filter(g => g.kind === 'image').map(g => g.url);
   const pool = [...dogImages, ...galleryImages];
-  const heroCenter = pool[0];
+  // Editable home photos (admin → Page content) fall back to derived imagery.
+  const heroCenter = settings.hero_image || pool[0];
   const heroLeft = [pool[1], pool[2]].filter(Boolean) as string[];
   const heroRight = [pool[3], pool[4]].filter(Boolean) as string[];
+  const philosophyLeft = settings.philosophy_left_image || '/images/structure-show.jpg';
+  const philosophyRight = settings.philosophy_right_image || pool[6] || heroLeft[0];
 
   return (
     <>
@@ -55,7 +58,7 @@ export default async function Home(props: Props) {
         tagline={settings.hero_subhead}
       />
 
-      <Philosophy leftImage="/images/structure-show.jpg" rightImage={pool[6] ?? heroLeft[0]} />
+      <Philosophy leftImage={philosophyLeft} rightImage={philosophyRight} />
 
       {/* Featured dogs */}
       {featured.length > 0 && (

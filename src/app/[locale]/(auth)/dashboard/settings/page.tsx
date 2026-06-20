@@ -1,6 +1,7 @@
 import { TitleBar } from '@/features/dashboard/TitleBar';
 import { saveSettings } from '@/features/mako/actions';
 import { Field, TextArea, TextInput } from '@/features/mako/admin/Fields';
+import { ImageField } from '@/features/mako/admin/ImageField';
 import { getSettings } from '@/features/mako/queries';
 import { SETTINGS_FIELDS } from '@/features/mako/settings';
 
@@ -24,17 +25,31 @@ export default async function AdminSettingsPage(props: { searchParams: Promise<{
 
       <div className="rounded-xl border bg-card p-6">
         <form action={saveSettings} className="space-y-6">
-          {SETTINGS_FIELDS.map(field => (
-            <Field key={field.key} label={field.label}>
-              {field.type === 'textarea'
-                ? (
-                    <TextArea name={field.key} rows={5} defaultValue={settings[field.key] ?? ''} />
-                  )
-                : (
-                    <TextInput name={field.key} defaultValue={settings[field.key] ?? ''} />
-                  )}
-            </Field>
-          ))}
+          {SETTINGS_FIELDS.map((field) => {
+            const hint = 'hint' in field ? field.hint : undefined;
+            if (field.type === 'image') {
+              return (
+                <ImageField
+                  key={field.key}
+                  name={field.key}
+                  label={field.label}
+                  hint={hint}
+                  defaultValue={settings[field.key] ?? ''}
+                />
+              );
+            }
+            return (
+              <Field key={field.key} label={field.label} hint={hint}>
+                {field.type === 'textarea'
+                  ? (
+                      <TextArea name={field.key} rows={5} defaultValue={settings[field.key] ?? ''} />
+                    )
+                  : (
+                      <TextInput name={field.key} defaultValue={settings[field.key] ?? ''} />
+                    )}
+              </Field>
+            );
+          })}
           <button
             type="submit"
             className="
