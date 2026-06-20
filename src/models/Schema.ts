@@ -75,6 +75,7 @@ export const littersSchema = pgTable('litters', {
   heroImage: text('hero_image').default(''),
   gallery: jsonb('gallery').$type<string[]>().notNull().default([]),
   picks: jsonb('picks').$type<LitterPick[]>().notNull().default([]),
+  liveStreamUrl: text('live_stream_url').default(''), // litter cam: MUX playback ID, HLS/MP4 URL, or empty
   sortOrder: integer('sort_order').notNull().default(0),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()

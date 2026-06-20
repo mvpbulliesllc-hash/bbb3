@@ -1,0 +1,1 @@
+ALTER TABLE "litters" ADD COLUMN "live_stream_url" text DEFAULT '';

@@ -133,6 +133,7 @@ export async function saveLitter(formData: FormData) {
     heroImage: str(formData, 'heroImage'),
     gallery: urlList(formData, 'gallery'),
     picks: parsePicks(formData, 'picks'),
+    liveStreamUrl: str(formData, 'liveStreamUrl'),
     sortOrder: num(formData, 'sortOrder'),
   };
 

@@ -3,8 +3,11 @@ import { Link } from '@/libs/I18nNavigation';
 import { whatsappLink } from '../Brand';
 import { FadeImage } from './FadeImage';
 import { InquiryForm } from './InquiryForm';
+import { LitterCam } from './LitterCam';
 import { PricingTable } from './PricingTable';
 import { StatusBadge } from './StatusBadge';
+
+const GALLERY_SLOTS = 12;
 
 type Litter = typeof littersSchema.$inferSelect;
 
@@ -120,31 +123,61 @@ export const LitterProfile = ({ litter }: { litter: Litter }) => {
           </section>
         )}
 
-        {/* Puppy gallery */}
-        {litter.gallery.length > 0 && (
+        {/* Litter cam — live feed of the puppies */}
+        {litter.liveStreamUrl && (
           <section className="mt-16">
             <h2 className="font-display text-3xl font-semibold text-foreground">
-              Puppy Gallery
+              Litter Cam
             </h2>
-            <div className="
-              mt-8 grid grid-cols-2 gap-4
-              md:grid-cols-3
-            "
-            >
-              {litter.gallery.map(url => (
-                <div
-                  key={url}
-                  className="
-                    relative aspect-square overflow-hidden rounded-xl
-                    bg-secondary
-                  "
-                >
-                  <FadeImage src={url} alt={`${litter.name} puppy`} />
-                </div>
-              ))}
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              A live look inside the whelping room. Connect any webcam or stream to keep
+              buyers watching their puppy grow.
+            </p>
+            <div className="mt-8">
+              <LitterCam streamUrl={litter.liveStreamUrl} title={`${litter.name} — Litter Cam`} />
             </div>
           </section>
         )}
+
+        {/* Puppy gallery — one box per puppy */}
+        <section className="mt-16">
+          <h2 className="font-display text-3xl font-semibold text-foreground">
+            Puppy Gallery
+          </h2>
+          <div className="
+            mt-8 grid grid-cols-2 gap-4
+            md:grid-cols-3
+            lg:grid-cols-4
+          "
+          >
+            {Array.from({ length: GALLERY_SLOTS }).map((_, i) => {
+              const url = litter.gallery[i];
+              return (
+                <div
+                  key={url ?? `slot-${i}`}
+                  className="
+                    relative flex aspect-square items-center justify-center
+                    overflow-hidden rounded-xl bg-secondary
+                  "
+                >
+                  {url
+                    ? (
+                        <FadeImage src={url} alt={`${litter.name} puppy ${i + 1}`} />
+                      )
+                    : (
+                        <span className="
+                          font-display text-2xl font-medium
+                          text-muted-foreground/50
+                        "
+                        >
+                          {i + 1}
+                        </span>
+                      )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         {/* Waitlist / inquiry */}
         <section className="
