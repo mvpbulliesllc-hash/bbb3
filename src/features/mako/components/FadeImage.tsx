@@ -21,6 +21,7 @@ export function FadeImage({ src, alt, label, className, fadeDelay = 0 }: FadeIma
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,6 +38,16 @@ export function FadeImage({ src, alt, label, className, fadeDelay = 0 }: FadeIma
     }
     return () => observer.disconnect();
   }, [fadeDelay]);
+
+  // An image that is already cached/complete before hydration never fires
+  // `onLoad`, which would otherwise leave it stuck at opacity-0. Detect that
+  // case (and reset for a new src) so the photo always becomes visible.
+  useEffect(() => {
+    setIsLoaded(false);
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+  }, [src]);
 
   const initials = (label ?? alt)
     .split(' ')

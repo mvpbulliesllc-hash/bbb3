@@ -55,8 +55,8 @@ export const demoDogs: Dog[] = [
     color: 'All-white',
     bio: 'Our famous "white panther." As the youngest female in her category at the ABKC Show Tatry, she placed at all six shows with two 1st-place wins — confident movement, beautiful structure and the face of Mako Kennel.',
     featured: true,
-    heroImage: img('005'),
-    gallery: [img('093'), img('085')],
+    heroImage: img('013'),
+    gallery: [img('093'), img('005'), img('000')],
     sortOrder: 2,
   },
   {
@@ -85,6 +85,20 @@ export const demoDogs: Dog[] = [
     heroImage: img('104'),
     gallery: [img('019')],
     sortOrder: 4,
+  },
+  {
+    ...dogDefaults,
+    id: 5,
+    slug: 'makos-greatbar',
+    type: 'stud',
+    name: 'Mako\'s Greatbar',
+    color: 'Lilac merle',
+    bio: 'Our kept young lilac merle male and the future of the kennel. At just 9 months old he stepped into the ring at the ABKC Show Tatry against older males and earned 2× 1st Place and 2× Reserve in XL 9–12 Months — structure, bone and presence well beyond his age.',
+    studFee: 'Inquire',
+    featured: true,
+    heroImage: img('061'),
+    gallery: [img('101'), img('011')],
+    sortOrder: 5,
   },
 ];
 
