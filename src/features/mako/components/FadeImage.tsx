@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { cn } from '@/utils/Helpers';
 import { Brand } from '../Brand';
 
@@ -21,33 +21,45 @@ export function FadeImage({ src, alt, label, className, fadeDelay = 0 }: FadeIma
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
 
+  // Reveal when scrolled into view. If IntersectionObserver is unavailable, or
+  // the element is already on-screen at mount, reveal immediately so an in-view
+  // image can never stay stuck invisible.
   useEffect(() => {
+    const el = ref.current;
+    if (!el) {
+      return;
+    }
+    const reveal = () => setTimeout(setIsVisible, fadeDelay, true);
+
+    if (typeof IntersectionObserver === 'undefined') {
+      reveal();
+      return;
+    }
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setTimeout(setIsVisible, fadeDelay, true);
+          reveal();
           observer.disconnect();
         }
       },
       { threshold: 0.1, rootMargin: '50px' },
     );
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    observer.observe(el);
     return () => observer.disconnect();
   }, [fadeDelay]);
 
-  // An image that is already cached/complete before hydration never fires
-  // `onLoad`, which would otherwise leave it stuck at opacity-0. Detect that
-  // case (and reset for a new src) so the photo always becomes visible.
-  useEffect(() => {
-    setIsLoaded(false);
-    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
-      setIsLoaded(true);
+  // A cached image often finishes loading before React attaches `onLoad` (very
+  // common on client-side navigation), so `onLoad` never fires and the photo
+  // would stay invisible. Reading `.complete` synchronously when the <img>
+  // mounts catches that with no race. Combined with `key={src}` below, this
+  // re-runs for every new src. `onError` also reveals so a broken URL doesn't
+  // leave a blank box.
+  const handleImgRef = useCallback((node: HTMLImageElement | null) => {
+    if (node) {
+      setIsLoaded(node.complete && node.naturalWidth > 0);
     }
-  }, [src]);
+  }, []);
 
   const initials = (label ?? alt)
     .split(' ')
@@ -62,10 +74,13 @@ export function FadeImage({ src, alt, label, className, fadeDelay = 0 }: FadeIma
       {src
         ? (
             <img
+              key={src}
+              ref={handleImgRef}
               src={src}
               alt={alt}
               loading="lazy"
               onLoad={() => setIsLoaded(true)}
+              onError={() => setIsLoaded(true)}
               className={cn(
                 'size-full object-cover transition-all duration-700 ease-out',
                 isVisible && isLoaded
