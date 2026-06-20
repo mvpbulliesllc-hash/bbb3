@@ -1,15 +1,9 @@
-import type { HandleUploadBody } from '@vercel/blob/client';
 import { auth } from '@clerk/nextjs/server';
 import { put } from '@vercel/blob';
-import { handleUpload } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
-/**
- * Find the Vercel Blob read-write token. Defaults to BLOB_READ_WRITE_TOKEN,
- * but a custom-named store can expose it under a prefixed var
- * (e.g. MAKE_PHOTO_READ_WRITE_TOKEN), so fall back to any matching token.
- */
-function resolveBlobToken(): string | undefined {
+/** Vercel Blob read-write token under any env var name (BLOB_… or a prefixed store). */
+function resolveToken(): string | undefined {
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     return process.env.BLOB_READ_WRITE_TOKEN;
   }
@@ -21,65 +15,78 @@ function resolveBlobToken(): string | undefined {
   return undefined;
 }
 
-/**
- * Diagnostic: open /api/admin/upload in the browser (while signed in) to test
- * the Blob connection and see exactly what's configured. Temporary.
- */
+/** Vercel Blob store id under any env var name (newer storeId-based auth). */
+function resolveStoreId(): string | undefined {
+  if (process.env.BLOB_STORE_ID) {
+    return process.env.BLOB_STORE_ID;
+  }
+  for (const [key, value] of Object.entries(process.env)) {
+    if (key.endsWith('STORE_ID') && typeof value === 'string' && value.startsWith('store_')) {
+      return value;
+    }
+  }
+  return undefined;
+}
+
+/** Put options that work whether the store exposes a token or just a storeId. */
+function blobAuth() {
+  const token = resolveToken();
+  const storeId = resolveStoreId();
+  if (token) {
+    return { token } as const;
+  }
+  if (storeId) {
+    return { storeId } as const;
+  }
+  return {} as const;
+}
+
+export async function POST(request: Request): Promise<NextResponse> {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const form = await request.formData();
+  const file = form.get('file');
+  if (!(file instanceof File)) {
+    return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+  }
+
+  try {
+    const result = await put(`uploads/${file.name}`, file, {
+      access: 'public',
+      addRandomSuffix: true,
+      contentType: file.type || 'image/jpeg',
+      ...blobAuth(),
+    });
+    return NextResponse.json({ url: result.url });
+  } catch (error) {
+    const keys = Object.keys(process.env).filter(k => k.includes('BLOB') || k.endsWith('READ_WRITE_TOKEN') || k.endsWith('STORE_ID'));
+    console.error(`[upload] put failed: ${(error as Error).message} | envKeys=${keys.join(',')}`);
+    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+  }
+}
+
+/** Temporary diagnostic — open while signed in to verify the Blob connection. */
 export async function GET(): Promise<NextResponse> {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ ok: false, reason: 'not signed in' }, { status: 401 });
   }
-  const token = resolveBlobToken();
-  const blobEnvKeys = Object.keys(process.env).filter(k => k.includes('BLOB') || k.endsWith('READ_WRITE_TOKEN'));
-  let putTest = 'skipped — no token resolved';
-  if (token) {
-    try {
-      const result = await put(`diagnostics/test-${Date.now()}.txt`, 'ok', {
-        access: 'public',
-        token,
-        addRandomSuffix: true,
-      });
-      putTest = `OK → ${result.url}`;
-    } catch (error) {
-      putTest = `FAILED → ${(error as Error).message}`;
-    }
-  }
-  return NextResponse.json({ tokenResolved: !!token, blobEnvKeys, putTest });
-}
-
-/**
- * Authenticated image uploads for the admin dashboard (Vercel Blob client
- * uploads, so large photos bypass the serverless body-size limit).
- */
-export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
-  const token = resolveBlobToken();
-
+  const token = resolveToken();
+  const storeId = resolveStoreId();
+  const envKeys = Object.keys(process.env).filter(k => k.includes('BLOB') || k.endsWith('READ_WRITE_TOKEN') || k.endsWith('STORE_ID'));
+  let putTest: string;
   try {
-    const result = await handleUpload({
-      body,
-      request,
-      token,
-      onBeforeGenerateToken: async () => {
-        const { userId } = await auth();
-        if (!userId) {
-          throw new Error('Unauthorized');
-        }
-        return {
-          allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'],
-          maximumSizeInBytes: 20 * 1024 * 1024,
-          addRandomSuffix: true,
-        };
-      },
-      onUploadCompleted: async () => {
-        // No-op: the client stores the returned URL in the form.
-      },
+    const result = await put(`diagnostics/test-${Date.now()}.txt`, 'ok', {
+      access: 'public',
+      addRandomSuffix: true,
+      ...blobAuth(),
     });
-    return NextResponse.json(result);
+    putTest = `OK → ${result.url}`;
   } catch (error) {
-    const blobKeys = Object.keys(process.env).filter(k => k.includes('BLOB') || k.endsWith('READ_WRITE_TOKEN'));
-    console.error(`[upload] failed: ${(error as Error).message} | tokenResolved=${!!token} | blobEnvKeys=${blobKeys.join(',')}`);
-    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+    putTest = `FAILED → ${(error as Error).message}`;
   }
+  return NextResponse.json({ hasToken: !!token, hasStoreId: !!storeId, envKeys, putTest });
 }
