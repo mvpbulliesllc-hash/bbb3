@@ -20,10 +20,19 @@ const isAuthPage = createRouteMatcher([
   '/:locale/sign-up(.*)',
 ]);
 
+// API routes (e.g. /api/admin/upload) must NOT go through i18n routing, which
+// would treat them as localized pages and 404 them. Run Clerk so `auth()` works
+// inside the route handlers, then let the route run as-is.
+const isApiRoute = createRouteMatcher(['/api/(.*)']);
+
 export default async function proxy(
   request: NextRequest,
   event: NextFetchEvent,
 ) {
+  if (isApiRoute(request)) {
+    return clerkMiddleware()(request, event);
+  }
+
   // Clerk keyless mode doesn't work with i18n, this is why we need to run the middleware conditionally
   if (
     isAuthPage(request) || isProtectedRoute(request)
