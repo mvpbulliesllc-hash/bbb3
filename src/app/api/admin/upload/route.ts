@@ -1,5 +1,6 @@
 import type { HandleUploadBody } from '@vercel/blob/client';
 import { auth } from '@clerk/nextjs/server';
+import { put } from '@vercel/blob';
 import { handleUpload } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
@@ -18,6 +19,33 @@ function resolveBlobToken(): string | undefined {
     }
   }
   return undefined;
+}
+
+/**
+ * Diagnostic: open /api/admin/upload in the browser (while signed in) to test
+ * the Blob connection and see exactly what's configured. Temporary.
+ */
+export async function GET(): Promise<NextResponse> {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ ok: false, reason: 'not signed in' }, { status: 401 });
+  }
+  const token = resolveBlobToken();
+  const blobEnvKeys = Object.keys(process.env).filter(k => k.includes('BLOB') || k.endsWith('READ_WRITE_TOKEN'));
+  let putTest = 'skipped — no token resolved';
+  if (token) {
+    try {
+      const result = await put(`diagnostics/test-${Date.now()}.txt`, 'ok', {
+        access: 'public',
+        token,
+        addRandomSuffix: true,
+      });
+      putTest = `OK → ${result.url}`;
+    } catch (error) {
+      putTest = `FAILED → ${(error as Error).message}`;
+    }
+  }
+  return NextResponse.json({ tokenResolved: !!token, blobEnvKeys, putTest });
 }
 
 /**
