@@ -96,20 +96,6 @@ export const demoDogs: Dog[] = [
   },
   {
     ...dogDefaults,
-    id: 4,
-    slug: 'moncler',
-    type: 'stud',
-    name: 'Moncler',
-    color: 'Chocolate tri',
-    bio: 'A featured stud in our high-end breedings, bringing substance, structure and a massive head to every litter.',
-    studFee: 'Inquire',
-    featured: true,
-    heroImage: img('104'),
-    gallery: [img('019')],
-    sortOrder: 4,
-  },
-  {
-    ...dogDefaults,
     id: 5,
     slug: 'makos-greatbar',
     type: 'stud',
@@ -118,9 +104,9 @@ export const demoDogs: Dog[] = [
     bio: 'Our kept young lilac merle male and the future of the kennel. At just 9 months old he stepped into the ring at the ABKC Show Tatry against older males and earned 2× 1st Place and 2× Reserve in XL 9–12 Months — structure, bone and presence well beyond his age.',
     studFee: 'Inquire',
     featured: true,
-    heroImage: img('061'),
-    gallery: [img('025'), img('013'), img('101')],
-    sortOrder: 5,
+    heroImage: '/images/greatbar-show.jpg',
+    gallery: [img('061'), img('025'), img('013'), img('101')],
+    sortOrder: 4,
   },
 ];
 
