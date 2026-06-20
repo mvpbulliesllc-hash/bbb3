@@ -1,4 +1,4 @@
-import type { dogsSchema, gallerySchema, littersSchema, puppiesSchema } from '@/models/Schema';
+import type { dogsSchema, gallerySchema, LitterPick, littersSchema, puppiesSchema } from '@/models/Schema';
 
 /**
  * Demo fixtures used ONLY when `DEMO_MODE=true` and the database returns no rows
@@ -17,6 +17,28 @@ const now = new Date('2026-01-01T00:00:00Z');
 
 /** Local photo in /public/images. */
 const img = (n: string) => `/images/img-${n}.jpg`;
+
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+
+/** Build a Male/Female pick-of-the-litter pricing table (picks 1–6 each). */
+const picksFor = (
+  male: number[],
+  female: number[],
+  opts: { maleReserved?: number; femaleReserved?: number } = {},
+): LitterPick[] => [
+  ...male.map((price, i) => ({
+    sex: 'Male',
+    pick: i + 1,
+    price: money(price),
+    status: i < (opts.maleReserved ?? 0) ? 'reserved' : 'available',
+  })),
+  ...female.map((price, i) => ({
+    sex: 'Female',
+    pick: i + 1,
+    price: money(price),
+    status: i < (opts.femaleReserved ?? 0) ? 'reserved' : 'available',
+  })),
+];
 
 const dogDefaults = {
   dob: '',
@@ -114,7 +136,12 @@ export const demoLitters: Litter[] = [
     expectedColors: 'Merle females',
     description: 'On the ground! Euphoria × Moncler — gorgeous merle females in their first days. A pairing built for extreme structure, massive heads and that real XL bully presence. Waitlist open.',
     heroImage: img('019'),
-    gallery: [img('046'), img('071')],
+    gallery: [img('046'), img('001'), img('100'), img('103'), img('038')],
+    picks: picksFor(
+      [7500, 6500, 6000, 5500, 5000, 4500],
+      [10000, 9000, 8000, 7500, 7000, 6500],
+      { femaleReserved: 2 },
+    ),
     sortOrder: 1,
     updatedAt: now,
     createdAt: now,
@@ -131,6 +158,10 @@ export const demoLitters: Litter[] = [
     description: 'A highly anticipated planned breeding pairing our lilac tri stud with the white panther. Join the waitlist to be first in line.',
     heroImage: img('002'),
     gallery: [],
+    picks: picksFor(
+      [8000, 7000, 6500, 6000, 5500, 5000],
+      [9000, 8000, 7500, 7000, 6500, 6000],
+    ),
     sortOrder: 2,
     updatedAt: now,
     createdAt: now,

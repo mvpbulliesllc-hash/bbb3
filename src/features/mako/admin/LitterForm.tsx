@@ -51,6 +51,20 @@ export const LitterForm = ({ litter }: { litter?: Litter }) => (
       <TextArea name="gallery" rows={3} defaultValue={(litter?.gallery ?? []).join('\n')} placeholder="https://…" />
     </Field>
 
+    <Field
+      label="Pick pricing"
+      hint="One pick per line: Sex | Pick number | Price | Status (available/reserved/sold). e.g. Male | 1 | $9,000 | available"
+    >
+      <TextArea
+        name="picks"
+        rows={6}
+        defaultValue={(litter?.picks ?? [])
+          .map(p => `${p.sex} | ${p.pick} | ${p.price} | ${p.status}`)
+          .join('\n')}
+        placeholder={'Male | 1 | $9,000 | available\nFemale | 1 | $10,000 | reserved'}
+      />
+    </Field>
+
     <Field label="Sort order" hint="Lower shows first">
       <TextInput name="sortOrder" type="number" defaultValue={litter?.sortOrder ?? 0} />
     </Field>

@@ -1,5 +1,6 @@
 'use server';
 
+import type { LitterPick } from '@/models/Schema';
 import { auth } from '@clerk/nextjs/server';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -35,6 +36,27 @@ function urlList(form: FormData, key: string) {
     .split(/[\n,]+/)
     .map(s => s.trim())
     .filter(Boolean);
+}
+
+/**
+ * Parse a pick-pricing textarea. One pick per line:
+ *   `Male | 1 | $9,000 | available`
+ */
+function parsePicks(form: FormData, key: string): LitterPick[] {
+  return str(form, key)
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [sex = '', pick = '', price = '', status = ''] = line.split('|').map(s => s.trim());
+      return {
+        sex,
+        pick: Number.parseInt(pick, 10) || 0,
+        price,
+        status: status || 'available',
+      };
+    })
+    .filter(p => p.sex !== '' && p.pick > 0);
 }
 
 function revalidatePublic() {
@@ -110,6 +132,7 @@ export async function saveLitter(formData: FormData) {
     description: str(formData, 'description'),
     heroImage: str(formData, 'heroImage'),
     gallery: urlList(formData, 'gallery'),
+    picks: parsePicks(formData, 'picks'),
     sortOrder: num(formData, 'sortOrder'),
   };
 

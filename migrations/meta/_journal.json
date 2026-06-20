@@ -15,6 +15,13 @@
       "when": 1781899371859,
       "tag": "0001_equal_iron_lad",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781925871990,
+      "tag": "0002_wandering_white_queen",
+      "breakpoints": true
     }
   ]
 }
