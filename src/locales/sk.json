@@ -1,0 +1,28 @@
+{
+  "LocaleSwitcher": {
+    "button_label": "Zmeniť jazyk"
+  },
+  "Footer": {
+    "footer_text": "© {year} {name}. Vyrobené s <author></author>."
+  },
+  "SignIn": {
+    "meta_title": "Prihlásenie",
+    "meta_description": "Jednoducho sa prihláste do svojho účtu."
+  },
+  "SignUp": {
+    "meta_title": "Registrácia",
+    "meta_description": "Vytvorte si účet jednoducho pomocou nášho intuitívneho procesu registrácie."
+  },
+  "DashboardLayout": {
+    "meta_title": "Nástenka Mako Kennel",
+    "meta_description": "Spravujte psov, vrhy, šteniatka, fotografie a dopyty pre Mako Kennel."
+  },
+  "UserProfilePage": {
+    "title_bar": "Používateľský profil",
+    "title_bar_description": "Zobrazte a spravujte svoj používateľský profil"
+  },
+  "OrganizationProfilePage": {
+    "title_bar": "Správa organizácie",
+    "title_bar_description": "Spravujte svoju organizáciu"
+  }
+}
