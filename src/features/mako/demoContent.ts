@@ -90,8 +90,8 @@ export const demoDogs: Dog[] = [
     color: 'Chocolate merle',
     bio: 'Our chocolate merle dam from the Bossy bloodline — 55 kg of structure, a massive head and a rare merle coat. The dam behind standout breedings, including Moncler × Euphoria.',
     featured: true,
-    heroImage: img('092'),
-    gallery: [img('095'), img('019')],
+    heroImage: '/images/euphoria.jpg',
+    gallery: [img('092'), img('095'), img('019')],
     sortOrder: 3,
   },
   {
