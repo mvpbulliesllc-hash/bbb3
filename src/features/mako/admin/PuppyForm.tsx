@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { savePuppy } from '../actions';
 import { PUPPY_STATUSES } from '../types';
 import { Field, Select, TextArea, TextInput } from './Fields';
+import { GalleryField } from './GalleryField';
+import { ImageField } from './ImageField';
 
 type Puppy = typeof puppiesSchema.$inferSelect;
 type Litter = typeof littersSchema.$inferSelect;
@@ -26,7 +28,10 @@ export const PuppyForm = ({ puppy, litters }: { puppy?: Puppy; litters: Litter[]
         </Select>
       </Field>
       <Field label="Sex">
-        <TextInput name="sex" defaultValue={puppy?.sex ?? ''} placeholder="Male / Female" />
+        <Select name="sex" defaultValue={puppy?.sex ?? 'Male'}>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </Select>
       </Field>
       <Field label="Color">
         <TextInput name="color" defaultValue={puppy?.color ?? ''} placeholder="e.g. Lilac tri" />
@@ -45,13 +50,9 @@ export const PuppyForm = ({ puppy, litters }: { puppy?: Puppy; litters: Litter[]
       <TextArea name="description" rows={3} defaultValue={puppy?.description ?? ''} />
     </Field>
 
-    <Field label="Hero image URL">
-      <TextInput name="heroImage" defaultValue={puppy?.heroImage ?? ''} placeholder="https://…" />
-    </Field>
+    <ImageField name="heroImage" label="Main photo" defaultValue={puppy?.heroImage ?? ''} />
 
-    <Field label="Gallery image URLs" hint="One URL per line.">
-      <TextArea name="gallery" rows={3} defaultValue={(puppy?.gallery ?? []).join('\n')} placeholder="https://…" />
-    </Field>
+    <GalleryField name="gallery" label="More photos" defaultValue={puppy?.gallery ?? []} />
 
     <div className="
       grid gap-5
