@@ -17,6 +17,13 @@ export const SETTINGS_FIELDS = [
       'Professional ABKC breeder since 2020. Heavy bone, large heads and rare coat colors — bred for health, character and structure, and shipped worldwide from Europe.',
   },
   {
+    key: 'hero_image',
+    label: 'Home hero — main photo',
+    type: 'image',
+    hint: 'The big photo behind the MAKO wordmark. Leave empty to use your first featured dog.',
+    default: '',
+  },
+  {
     key: 'about_body',
     label: 'About paragraph',
     type: 'textarea',
@@ -36,6 +43,20 @@ export const SETTINGS_FIELDS = [
     type: 'textarea',
     default:
       'Interested in a puppy, a stud service or shipping to your country? Send us a message and we\'ll get back to you personally. For the fastest reply, reach us on WhatsApp.',
+  },
+  {
+    key: 'philosophy_left_image',
+    label: 'Home — “Show-quality structure” photo',
+    type: 'image',
+    hint: 'Left photo in the “Health. Character. Structure.” section.',
+    default: '/images/structure-show.jpg',
+  },
+  {
+    key: 'philosophy_right_image',
+    label: 'Home — “Calm, family temperament” photo',
+    type: 'image',
+    hint: 'Right photo in the “Health. Character. Structure.” section. Leave empty to use a gallery photo.',
+    default: '',
   },
   {
     key: 'home_video_url',
