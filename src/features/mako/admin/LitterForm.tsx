@@ -65,6 +65,13 @@ export const LitterForm = ({ litter }: { litter?: Litter }) => (
       />
     </Field>
 
+    <Field
+      label="Litter cam"
+      hint="Live feed of the puppies. Paste a MUX live Playback ID, an HLS/MP4 stream URL, or leave blank to hide. (MUX → create a live stream, point your webcam/OBS at the RTMP ingest, then paste the Playback ID.)"
+    >
+      <TextInput name="liveStreamUrl" defaultValue={litter?.liveStreamUrl ?? ''} placeholder="MUX playback ID or https://…/stream.m3u8" />
+    </Field>
+
     <Field label="Sort order" hint="Lower shows first">
       <TextInput name="sortOrder" type="number" defaultValue={litter?.sortOrder ?? 0} />
     </Field>
