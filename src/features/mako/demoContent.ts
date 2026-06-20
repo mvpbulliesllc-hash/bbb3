@@ -97,7 +97,7 @@ export const demoDogs: Dog[] = [
     studFee: 'Inquire',
     featured: true,
     heroImage: img('061'),
-    gallery: [img('025'), img('101')],
+    gallery: [img('025'), img('013'), img('101')],
     sortOrder: 5,
   },
 ];
