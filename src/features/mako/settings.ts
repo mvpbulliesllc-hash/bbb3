@@ -38,10 +38,16 @@ export const SETTINGS_FIELDS = [
       'Interested in a puppy, a stud service or shipping to your country? Send us a message and we\'ll get back to you personally. For the fastest reply, reach us on WhatsApp.',
   },
   {
+    key: 'home_video_url',
+    label: 'Home video — direct file URL (overrides MUX Playback ID)',
+    type: 'text',
+    default: '/videos/mako.mp4',
+  },
+  {
     key: 'home_video_playback_id',
     label: 'Home video — MUX Playback ID',
     type: 'text',
-    default: 'DS00Spx1CV902MCtPj5WknGlR102V5HFkDe',
+    default: '',
   },
 ] as const;
 

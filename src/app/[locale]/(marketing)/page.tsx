@@ -258,7 +258,11 @@ export default async function Home(props: Props) {
       </section>
 
       {/* Full-width MUX video block */}
-      <MuxVideoBlock playbackId={settings.home_video_playback_id ?? ''} title={Brand.name} />
+      <MuxVideoBlock
+        src={settings.home_video_url ?? ''}
+        playbackId={settings.home_video_playback_id ?? ''}
+        title={Brand.name}
+      />
     </>
   );
 }
