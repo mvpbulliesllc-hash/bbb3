@@ -55,7 +55,7 @@ export default async function Home(props: Props) {
         tagline={settings.hero_subhead}
       />
 
-      <Philosophy leftImage={pool[5] ?? heroCenter} rightImage={pool[6] ?? heroLeft[0]} />
+      <Philosophy leftImage="/images/structure-show.jpg" rightImage={pool[6] ?? heroLeft[0]} />
 
       {/* Featured dogs */}
       {featured.length > 0 && (
