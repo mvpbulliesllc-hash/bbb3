@@ -1,16 +1,8 @@
 'use client';
 
-import { upload } from '@vercel/blob/client';
 import { useRef, useState } from 'react';
 import { cn } from '@/utils/Helpers';
-
-async function uploadFile(file: File) {
-  const blob = await upload(file.name, file, {
-    access: 'public',
-    handleUploadUrl: '/api/admin/upload',
-  });
-  return blob.url;
-}
+import { uploadImage } from './uploadImage';
 
 const dropBase
   = 'flex flex-col items-center justify-center gap-2 rounded-md border border-dashed border-input bg-background px-4 py-6 text-center text-sm text-muted-foreground transition-colors cursor-pointer hover:border-ring';
@@ -40,7 +32,7 @@ export function ImageField({
     setBusy(true);
     setError('');
     try {
-      setUrl(await uploadFile(file));
+      setUrl(await uploadImage(file));
     } catch (error_) {
       setError((error_ as Error).message || 'Upload failed');
     } finally {
