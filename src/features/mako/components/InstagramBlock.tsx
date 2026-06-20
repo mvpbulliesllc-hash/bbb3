@@ -1,4 +1,5 @@
 import { Brand } from '../Brand';
+import { InstagramEmbed } from './InstagramEmbed';
 
 /**
  * Instagram feature block — links straight to her live profile so the site
@@ -44,6 +45,10 @@ export const InstagramBlock = () => (
       >
         View our Instagram
       </a>
+
+      <div className="mt-12">
+        <InstagramEmbed />
+      </div>
     </div>
   </section>
 );
